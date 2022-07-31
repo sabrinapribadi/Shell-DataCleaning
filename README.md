@@ -46,7 +46,7 @@ You are asked to clean up the e-commerce traffic data where you work. The data p
 
     `awk -F "," 'NR == 1; $2 == "purchase" {print }' SelectedColumn.csv > ColumnFiltered.csv`
     
-    <img src="preview/FilterColumn.png"><br>
+    <img src="preview/FilterColumns.png"><br>
 
 4. Split Category Code column into category and product name columns
 
