@@ -8,8 +8,8 @@ You may download the data traffic ecommerce [here](https://drive.google.com/file
 
 The data consists of:
 
-1. 2019-Oct-sample
-2. 2019-Nov-sample
+1. 2019-Oct-sample <br> <img src="preview/2019Oct.png"><br>
+2. 2019-Nov-sample  <br> <img src="preview/2019Nov.png"><br>
 
 ## Rubics
 
@@ -24,61 +24,67 @@ The data consists of:
 2. Csvkit
 3. Git
 
-## Overview
+## Background
 
-This is a simple console-based library system created using Python with the following functions:
-1. Search Book
-2. Check Out (Borrow) Book
-3. Check In (Return) Book
-4. Account & Membership Maintenance
-5. Book Management
-6. Records
-7. Exit
+You are asked to clean up the e-commerce traffic data where you work. The data provided is data for October and November 2019. Your boss wants to analyze the products sold. You are asked to clear the data and leave the relevant data.
 
-This system applies structured programming approach.
-
-## Code Logic
+## Code & Preview
 
 1. Append both data into one file
 
     `awk '(NR == 1) || (FNR > 1)' *.csv > DataMerge.csv`
+    
+    <img src="preview/AppendData.png"><br>
 
 2. select designated columns
 
     `awk -F "," '{print $2 "," $3 "," $4 "," $5 "," $7 "," $8 "," $6;}' DataMerge.csv > SelectedColumn.csv`
+    
+    <img src="preview/SelectColumns.png"><br>
 
 3. Filter event_type = "purchase"
 
     `awk -F "," 'NR == 1; $2 == "purchase" {print }' SelectedColumn.csv > ColumnFiltered.csv`
+    
+    <img src="preview/FilterColumn.png"><br>
 
 4. Split Category Code column into category and product name columns
 
    - Create parent file
    
       `awk -F "," '{print $1 "," $2 "," $3 "," $4 "," $5 "," $6;}' ColumnFiltered.csv > parentfile.csv`
+      
+      <img src="preview/parentfile.png"><br>
 
    - Extract the category column from category code column:
    
       `awk -F "," '{print $7;}' ColumnFiltered.csv | cut -d "." -f -1 | awk -F"," 'BEGIN { OFS = "," } NR==1{$1="category";print; next}{print}' > category.csv` 
+      
+      <img src="preview/category.png"><br>
 
    - Extract the product name column  from category code column:
    
       `awk -F "," '{print $7;}' ColumnFiltered.csv | cut -d "." -f 2- | awk -F"," 'BEGIN { OFS = "," } NR==1{$1="product name";print; next}{print}' > productnames.csv`
+      
+      <img src="preview/productname.png"><br>
 
    - Merge category column & product name column
    
       `paste -d , category.csv productnames.csv > childfile.csv`
+      
+      <img src="preview/childfile.png"><br>
 
    - Merge parentfile.csv & childfile.csv
    
       `paste -d , parentfile.csv childfile.csv > data_clean.csv`
+      
+      <img src="preview/data_clean.png"><br>
 
    - validate the data
    
       `grep electronics data_clean.csv | grep smartphone| awk -F ',' '{print $5}'| sort | uniq -c | sort -nr`
-
-
-## Preview
+      
+      <img src="preview/validate.png"><br>
 
 ## Authors
 
